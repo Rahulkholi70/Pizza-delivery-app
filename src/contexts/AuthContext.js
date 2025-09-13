@@ -61,8 +61,13 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Set auth token in axios headers
+  // Set axios base URL and auth token in headers
   useEffect(() => {
+    // Set base URL for API calls
+    if (process.env.REACT_APP_API_BASE_URL) {
+      axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+    }
+
     if (state.token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
       localStorage.setItem('token', state.token);
